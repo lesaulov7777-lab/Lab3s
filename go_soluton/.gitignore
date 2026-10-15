@@ -1,0 +1,13 @@
+# Скомпилированные файлы
+dbms
+*.exe
+
+# Данные
+interface/file.data
+
+# Системные файлы macOS
+.DS_Store
+
+# Файлы IDE
+.vscode/
+.idea/

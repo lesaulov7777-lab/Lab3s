@@ -5,7 +5,7 @@ using namespace std;
 Stack::Stack(){}; //создается список
 Stack::~Stack(){} //деструктор
 
-void Stack::push(int value){ //вставка элемента
+void Stack::push(string value){ //вставка элемента
     list.pushFront(value);
 }
 
@@ -13,30 +13,30 @@ bool Stack::isEmpty() const {
     return list.GetSize() == 0;
 }
 
-int Stack::getAt(int index) const {
+string Stack::getAt(int index) const {
     if (index < 0 || index >= getSize()) {
         cout << "Ошибка, индекс за пределами диапазона" << endl;
-        return -1;
+        return "";
     }
     return list.getAt(index);
 }
 
-int Stack::pop(){
+string Stack::pop(){
     if (!isEmpty()) {
-        int val = list.getAt(0); //вернуть верхний элемент
+        string val = list.getAt(0); //вернуть верхний элемент
         list.popFront();
         return val;
     }
-    return -1;
+    return "";
 }
 
-int Stack::top() const{
+string Stack::top() const{
     if(isEmpty()){
         cout<<"Стэк пуст"<<endl;
-        return -1;
+        return "";
     }
     return list.getAt(0);
-} 
+}
 
 int Stack::getSize() const{
     return list.GetSize();

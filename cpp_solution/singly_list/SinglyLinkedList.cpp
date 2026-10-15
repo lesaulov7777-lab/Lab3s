@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-SinglyNode::SinglyNode(int val) : value(val), next(nullptr) {} //узел
+SinglyNode::SinglyNode(string val) : value(val), next(nullptr) {} //узел
 
 SinglyLinkedList::SinglyLinkedList() { //конструктор
     head = nullptr;
@@ -28,7 +28,7 @@ void SinglyLinkedList::print() const { //вывести массив
     SinglyNode* current = head;
     cout<<"[";
     while (current != nullptr) {
-        cout << current->value;             
+        cout << current->value;
         if (current->next != nullptr) {
             cout << " -> ";
         }
@@ -37,14 +37,14 @@ void SinglyLinkedList::print() const { //вывести массив
     cout<<"]"<<endl;
 }
 
-void SinglyLinkedList::pushFront(int value){ //добавление в начало
+void SinglyLinkedList::pushFront(string value){ //добавление в начало
     SinglyNode* new_node = new SinglyNode(value);
     new_node->next = head;
     head = new_node;
     size++;
 }
 
-void SinglyLinkedList::pushBack(int value){ //добавление в конец
+void SinglyLinkedList::pushBack(string value){ //добавление в конец
     SinglyNode* new_node = new SinglyNode(value);
     if(head==nullptr){
         head = new_node;
@@ -53,7 +53,7 @@ void SinglyLinkedList::pushBack(int value){ //добавление в конец
         while(current->next!=nullptr){
             current = current->next;
         }
-        current->next=new_node; 
+        current->next=new_node;
     }
     size++;
 }
@@ -67,7 +67,7 @@ void SinglyLinkedList::popFront(){ //удаление в начале
         head = current->next;
         delete current;
         size--;
-    }   
+    }
 }
 
 void SinglyLinkedList::popBack(){ //удаление в конце
@@ -90,7 +90,7 @@ void SinglyLinkedList::popBack(){ //удаление в конце
     size--;
 }
 
-SinglyNode* SinglyLinkedList::find(int value) const { //поиск адреса узла по значению
+SinglyNode* SinglyLinkedList::find(string value) const { //поиск адреса узла по значению
     SinglyNode* current = head;
     while(current!=nullptr){
         if(current->value == value){
@@ -101,9 +101,10 @@ SinglyNode* SinglyLinkedList::find(int value) const { //поиск адреса 
     return nullptr;
 }
 
-void SinglyLinkedList::insertAfter(SinglyNode* node, int value){ //вставка после узла
+void SinglyLinkedList::insertAfter(string target, string value){ //вставка после узла с заданным значением
+    SinglyNode* node = find(target);
     if(node == nullptr){
-        cout<<"Ошибка, индекс не найден"<<endl;
+        cout<<"Узел с таким значением не найден"<<endl;
         return;
     }
     SinglyNode* new_node = new SinglyNode(value);
@@ -112,9 +113,10 @@ void SinglyLinkedList::insertAfter(SinglyNode* node, int value){ //вставк�
     size++;
 }
 
-void SinglyLinkedList::insertBefore(SinglyNode* node, int value){ //вставка до узла
+void SinglyLinkedList::insertBefore(string target, string value){ //вставка до узла с заданным значением
+    SinglyNode* node = find(target);
     if(node == nullptr){
-        cout<<"Ошибка, индекс не найден"<<endl;
+        cout<<"Узел с таким значением не найден"<<endl;
         return;
     }
     if(node == head){
@@ -126,17 +128,16 @@ void SinglyLinkedList::insertBefore(SinglyNode* node, int value){ //вставк
     while(current != nullptr && current->next!=node){
         current=current->next;
     }
-    if(current == nullptr){
-        cout << "Узел не найден в списке" << endl;
-        delete new_node;
-        return;
-    }
     new_node->next=current->next;
     current->next=new_node;
     size++;
 }
 
-void SinglyLinkedList::removeByValue(int value){ //удаление по значению
+void SinglyLinkedList::removeByValue(string value){ //удаление по значению
+    removeNode(value);
+}
+
+void SinglyLinkedList::removeNode(string value){ //удаление узла по значению
     if(head==nullptr){
         cout<<"Список пуст йоу"<<endl;
         return;
@@ -159,33 +160,53 @@ void SinglyLinkedList::removeByValue(int value){ //удаление по зна�
     size--;
 }
 
-void SinglyLinkedList::removeNode(SinglyNode* node){ //удаление по указателю
+void SinglyLinkedList::removeAfter(string target){ //удаление узла, стоящего после заданного
+    SinglyNode* node = find(target);
     if(node==nullptr){
-        cout<<"Ошибка, узел не найден"<<endl;
+        cout<<"Узел с таким значением не найден"<<endl;
+        return;
+    }
+    if(node->next==nullptr){
+        cout<<"После заданного узла нет узла"<<endl;
+        return;
+    }
+    SinglyNode* tmp = node->next;
+    node->next = tmp->next;
+    delete tmp;
+    size--;
+}
+
+void SinglyLinkedList::removeBefore(string target){ //удаление узла, стоящего до заданного
+    SinglyNode* node = find(target);
+    if(node==nullptr){
+        cout<<"Узел с таким значением не найден"<<endl;
         return;
     }
     if(node==head){
+        cout<<"Перед заданным узлом нет узла"<<endl;
+        return;
+    }
+    SinglyNode* prev = head;
+    while(prev->next!=node){
+        prev=prev->next;
+    }
+    if(prev==head){
         popFront();
         return;
     }
-    SinglyNode* current = head;
-    while(current->next!=nullptr && current->next!=node){
-        current=current->next;
+    SinglyNode* prevPrev = head;
+    while(prevPrev->next!=prev){
+        prevPrev=prevPrev->next;
     }
-    if(current->next == node){
-        current -> next = node -> next;
-        delete node;
-        size--;
-    }else{
-        cout<<"Узел не найден"<<endl;
-        return;
-    }
+    prevPrev->next=node;
+    delete prev;
+    size--;
 }
 
-int SinglyLinkedList::getAt(int index) const{ //Вернуть элемент по индексу
+string SinglyLinkedList::getAt(int index) const{ //Вернуть элемент по индексу
     if(index < 0 || index >= size){
         cout<<"Ошибка, индекс за пределами диапозона"<<endl;
-        return -1;
+        return "";
     }
     SinglyNode* current = head;
     for(int i=0; i<index; i++){

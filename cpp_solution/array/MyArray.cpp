@@ -3,7 +3,7 @@
 MyArray::MyArray(int cap) {   // ← без = 2!
     capacity = cap;
     size = 0;
-    data = new int[capacity];
+    data = new string[capacity];
 }
 
 MyArray::~MyArray() {
@@ -18,10 +18,10 @@ int MyArray::getCapacity() const {
     return capacity;
 }
 
-void MyArray::pushBack(int value) {
+void MyArray::pushBack(string value) {
     if (size >= capacity) {
         capacity *= 2;
-        int* newData = new int[capacity];
+        string* newData = new string[capacity];
         for (int i = 0; i < size; ++i) {
             newData[i] = data[i];
         }
@@ -31,14 +31,14 @@ void MyArray::pushBack(int value) {
     data[size++] = value;
 }
 
-void MyArray::insertAt(int index, int value) {
+void MyArray::insertAt(int index, string value) {
     if (index < 0 || index > size) {
         cout << "Индекс вне диапазона" << endl;
         return;
     }
     if (size == capacity) {
         int newCapacity = capacity * 2;
-        int* newData = new int[newCapacity];
+        string* newData = new string[newCapacity];
         for (int i = 0; i < size; i++) {
             newData[i] = data[i];
         }
@@ -53,15 +53,15 @@ void MyArray::insertAt(int index, int value) {
     size++;
 }
 
-int MyArray::getAt(int index) const {
+string MyArray::getAt(int index) const {
     if (index < 0 || index >= size) {
         cout << "Индекс вне диапазона" << endl;
-        return -1;
+        return "";
     }
     return data[index];
 }
 
-void MyArray::setAt(int index, int value) {
+void MyArray::setAt(int index, string value) {
     if (index < 0 || index >= size) {
         cout << "Индекс вне диапазона" << endl;
     } else {

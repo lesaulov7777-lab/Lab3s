@@ -1,20 +1,21 @@
 #ifndef STACK_H
 #define STACK_H
 
+#include <string>
 #include "SinglyLinkedList.h"
 
 class Stack {
 private:
     SinglyLinkedList list;   // внутренний список
-    
+
 public:
     Stack();
     ~Stack();
-    
-    int getAt(int index) const;
-    void push(int value);
-    int pop();
-    int top() const;
+
+    std::string getAt(int index) const;
+    void push(std::string value);
+    std::string pop();
+    std::string top() const;
     bool isEmpty() const;
     int getSize() const;
     void print() const;

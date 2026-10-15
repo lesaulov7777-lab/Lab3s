@@ -2,7 +2,7 @@
 #include<iostream>
 using namespace std;
 
-DoublyNode::DoublyNode(int val) { //создать узел
+DoublyNode::DoublyNode(string val) { //создать узел
     value = val;
     next = nullptr;
     prev = nullptr;
@@ -31,7 +31,7 @@ void DoublyLinkedList::print() const{ //чтение
     DoublyNode* current = head;
     cout<<"[";
     while (current != nullptr) {
-        cout << current->value;             
+        cout << current->value;
         if (current->next != nullptr) {
             cout << " <-> ";
         }
@@ -40,8 +40,8 @@ void DoublyLinkedList::print() const{ //чтение
     cout<<"]";
 }
 
-void DoublyLinkedList::pushFront(int value){ //вставка в начало
-    
+void DoublyLinkedList::pushFront(string value){ //вставка в начало
+
     if(head==nullptr){
         DoublyNode* new_node = new DoublyNode(value);
         head = new_node;
@@ -56,7 +56,7 @@ void DoublyLinkedList::pushFront(int value){ //вставка в начало
     }
 }
 
-void DoublyLinkedList::pushBack(int value){ //вставка в конец
+void DoublyLinkedList::pushBack(string value){ //вставка в конец
     if(head==nullptr){
         DoublyNode* new_node = new DoublyNode(value);
         head = new_node;
@@ -111,7 +111,7 @@ void DoublyLinkedList::popBack(){ //удалить последний элеме
     return;
 }
 
-DoublyNode* DoublyLinkedList::find(int value) const{ //Поиск по значению
+DoublyNode* DoublyLinkedList::find(string value) const{ //Поиск по значению
     DoublyNode* current = head;
     while(current!=nullptr){
         if(current->value == value){
@@ -122,9 +122,10 @@ DoublyNode* DoublyLinkedList::find(int value) const{ //Поиск по знач�
     return nullptr;
 }
 
-void DoublyLinkedList::insertAfter(DoublyNode* node, int value){ //вставка после узла
+void DoublyLinkedList::insertAfter(string target, string value){ //вставка после узла с заданным значением
+    DoublyNode* node = find(target);
     if(node==nullptr){
-        cout<<"Ошибка, узел не найден"<<endl;
+        cout<<"Узел с таким значением не найден"<<endl;
         return;
     }
     if(node==tail){
@@ -140,9 +141,10 @@ void DoublyLinkedList::insertAfter(DoublyNode* node, int value){ //вставк�
     return;
 }
 
-void DoublyLinkedList::insertBefore(DoublyNode* node, int value){ //Вставка до узла
+void DoublyLinkedList::insertBefore(string target, string value){ //Вставка до узла с заданным значением
+    DoublyNode* node = find(target);
     if(node==nullptr){
-        cout<<"Ошибка, узел не найден"<<endl;
+        cout<<"Узел с таким значением не найден"<<endl;
         return;
     }
     if(node==head){
@@ -158,11 +160,7 @@ void DoublyLinkedList::insertBefore(DoublyNode* node, int value){ //Вставк
     return;
 }
 
-void DoublyLinkedList::removeNode(DoublyNode* node){ //удаление по указателю
-    if(node==nullptr){
-        cout<<"Ошибка, узел не найден"<<endl;
-        return;
-    }
+void DoublyLinkedList::unlinkNode(DoublyNode* node){ //удаление узла по указателю
     if(node==head){
         popFront();
         return;
@@ -180,28 +178,54 @@ void DoublyLinkedList::removeNode(DoublyNode* node){ //удаление по у�
     return;
 }
 
-void DoublyLinkedList::removeByValue(int value){ //удаление по значению
+void DoublyLinkedList::removeNode(string value){ //удаление узла по значению
     if(head==nullptr){
         cout<<"Ошибка, список пуст"<<endl;
         return;
     }
-    if(head->value==value){
-        popFront();
-        return;
-    }
-    DoublyNode* current = find(value);
-    if(current==nullptr){
+    DoublyNode* node = find(value);
+    if(node==nullptr){
         cout<<"Узел с таким значением не найден"<<endl;
         return;
     }
-    removeNode(current);
+    unlinkNode(node);
     return;
 }
 
-int DoublyLinkedList::getAt(int index) const{ //вытащить элемент по индексу
+void DoublyLinkedList::removeByValue(string value){ //удаление по значению
+    removeNode(value);
+}
+
+void DoublyLinkedList::removeAfter(string target){ //удаление узла, стоящего после заданного
+    DoublyNode* node = find(target);
+    if(node==nullptr){
+        cout<<"Узел с таким значением не найден"<<endl;
+        return;
+    }
+    if(node->next==nullptr){
+        cout<<"После заданного узла нет узла"<<endl;
+        return;
+    }
+    unlinkNode(node->next);
+}
+
+void DoublyLinkedList::removeBefore(string target){ //удаление узла, стоящего до заданного
+    DoublyNode* node = find(target);
+    if(node==nullptr){
+        cout<<"Узел с таким значением не найден"<<endl;
+        return;
+    }
+    if(node->prev==nullptr){
+        cout<<"Перед заданным узлом нет узла"<<endl;
+        return;
+    }
+    unlinkNode(node->prev);
+}
+
+string DoublyLinkedList::getAt(int index) const{ //вытащить элемент по индексу
     if(index<0 || index>=size){
         cout<<"Ошибка, индекс за пределами даопозна"<<endl;
-        return -1;
+        return "";
     }
     DoublyNode* current = head;
     for(int i=0; i<index; i++){
